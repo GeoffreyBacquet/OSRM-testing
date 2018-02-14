@@ -61,6 +61,29 @@ void Startpoint::affichage( std::vector< std::vector< std::vector< float > > > g
     std::cout << "\n";
 }
 
+std::map<std::string, int> Startpoint::makemap(std::vector<std::vector<std::string> > route)
+{
+    std::map< std::string, int > compteur;
+    for( size_t i = 0; i < route.size(); i++ )
+    {
+        for( size_t j = 0; j < route[ i ].size(); j++ )
+        {
+            std::map< std::string, int >::iterator it;
+            it = compteur.find( route[ i ][ j ] );
+
+            if ( it != compteur.end() )
+            {
+                compteur[ route[ i ][ j ] ] += 1;
+            }
+            else
+            {
+                compteur[ route[ i ][ j ] ] = 1;
+            }
+        }
+    }
+    return compteur;
+}
+
 void Startpoint::insert()
 {
     sql::Driver *driver;

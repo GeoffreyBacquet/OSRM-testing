@@ -2,6 +2,7 @@
 #define STARTPOINT_H
 
 #include <vector>
+#include <map>
 #include "mysql_connection.h"
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -17,6 +18,8 @@ public:
     std::vector< std::vector< float > > startpoint() const;
 
     static void affichage( std::vector< std::vector< std::vector< float > > > gps );
+
+    static std::map< std::string, int > makemap( std::vector< std::vector < std::string> > route);
 
     static void insert();
 

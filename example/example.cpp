@@ -130,24 +130,7 @@ int main( int argc, char *argv[] )
         Startpoint::affichage( route );
 
         // Building map
-        std::map< std::string, int > compteur;
-        for( size_t i = 0; i < routestr.size(); i++ )
-        {
-            for( size_t j = 0; j < routestr[ i ].size(); j++ )
-            {
-                std::map< std::string, int >::iterator it;
-                it = compteur.find( routestr[ i ][ j ] );
-
-                if ( it != compteur.end() )
-                {
-                    compteur[ routestr[ i ][ j ] ] += 1;
-                }
-                else
-                {
-                    compteur[ routestr[ i ][ j ] ] = 1;
-                }
-            }
-        }
+        std::map< std::string, int > compteur(Startpoint::makemap(routestr));
 
         //Building set to sort map by value and not by key
         typedef std::function<bool( std::pair< std::string, int >, std::pair< std::string, int > ) > Comparator;
