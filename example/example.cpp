@@ -22,10 +22,63 @@
 #include <functional>
 #include <set>
 
-//int main()
+//boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
 //{
-//    Startpoint::insert();
+//    for(size_t i = 0; i < routestr.size(); i++)
+//    {
+//        std::string path = routestr[i][0];
+//        for(size_t j = 0; j < routestr[i].size(); j++)
+//        {
+//            if(j == routestr[i].size()-1)
+//            {
+//                tri.put(routestr[i][j], "end");
+//            }
+//            else
+//            {
+//                auto it = tri.find(routestr[i][j]);
+//                if(it == tri.not_found())
+//                {
+//                    boost::property_tree::ptree tri2;
+//                    tri2.add(routestr[i][j], "");
+//                    tri.add_child(path, tri2);
+//                }
+//                path = path + "." + routestr[i][j];
+//            }
+//        }
+//    }
+//    return tri;
 //}
+boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
+{
+    int taillemax(0);
+
+    for(size_t i=0; i < routestr.size(); i++)
+    {
+        if(routestr[i].size() > taillemax)
+        {
+            taillemax = routestr[i].size();
+        }
+    }
+
+    for(size_t j=0; j < taillemax; j++)
+    {
+        std::string path = routestr[0][0];
+        for(size_t k = 0; k < routestr.size(); k++)
+        {
+            if(j < routestr[k].size())
+            {
+                auto it = tri.find(routestr[k][j]);
+                if(it == tri.not_found())
+                {
+                    boost::property_tree::ptree tri2;
+                    tri2.put(routestr[k][j], "");
+                    tri.add_child(path, tri2);
+                }
+            }
+        }
+    }
+    return tri;
+}
 
 int main( int argc, char *argv[] )
 {
@@ -106,7 +159,13 @@ int main( int argc, char *argv[] )
                 auto location = maneuver.values[ "location" ].get< json::Array >();
                 float lat = location.values.at( 0 ).get< json::Number >().value;
                 float lon = location.values.at( 1 ).get< json::Number >().value;
-                std::string temp = std::to_string( lat ) + "," + std::to_string( lon );
+                std::string latstr = std::to_string(lat);
+                size_t pos1 = latstr.find(".");
+                latstr.erase(pos1, 1);
+                std::string lonstr = std::to_string(lon);
+                size_t pos2 = lonstr.find(".");
+                lonstr.erase(pos2, 1);
+                std::string temp = latstr + "," + lonstr;
                 gpsstr.push_back( temp );
                 gps.push_back( { lat, lon } );
             }
@@ -126,39 +185,29 @@ int main( int argc, char *argv[] )
         route.push_back( gps );
     }
 
-//     Showing trip coordinate maneuver
-        Startpoint::affichage( route );
+    //     Showing trip coordinate maneuver
+    //    Startpoint::affichage( route );
 
-        // Building map
-        std::map< std::string, int > compteur(Startpoint::makemap(routestr));
+    // Building map
+    //        std::map< std::string, int > compteur(Startpoint::makemap(routestr));
 
-        //Building set to sort map by value and not by key
-        typedef std::function<bool( std::pair< std::string, int >, std::pair< std::string, int > ) > Comparator;
+    //Building set to sort map by value and not by key
+    //        typedef std::function<bool( std::pair< std::string, int >, std::pair< std::string, int > ) > Comparator;
 
-        Comparator compFunctor = []( std::pair< std::string, int > elem1 ,std::pair< std::string, int > elem2)
-        {
-            return elem1.second > elem2.second;
-        };
+    //        Comparator compFunctor = []( std::pair< std::string, int > elem1 ,std::pair< std::string, int > elem2)
+    //        {
+    //            return elem1.second > elem2.second;
+    //        };
 
-        std::set< std::pair< std::string, int >, Comparator > setGPS( compteur.begin(), compteur.end(), compFunctor );
+    //        std::set< std::pair< std::string, int >, Comparator > setGPS( compteur.begin(), compteur.end(), compFunctor );
 
-        //Showing set { lat , lon } : number
-        for(std::pair< std::string, int > element : setGPS )
-        {
-            std::cout << element.first << " " << element.second << " passage \n";
-        }
+    //        //Showing set { lat , lon } : number
+    //        for(std::pair< std::string, int > element : setGPS )
+    //        {
+    //            std::cout << element.first << " " << element.second << " passage \n";
+    //        }
+    boost::property_tree::ptree tri;
 
-        int maxisize(0);
-
-        for( size_t i = 0; i < routestr.size(); i++)
-        {
-            std::cout << routestr[i].size() << std::endl;
-
-            if(routestr[i].size() > maxisize)
-            {
-                maxisize = routestr[i].size();
-            }
-        }
-        std::cout << maxisize << std::endl;
+    tri = getTri( routestr, tri );
+    boost::property_tree::json_parser::write_json(std::cout, tri);
 }
-
