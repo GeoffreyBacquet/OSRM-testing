@@ -14,3 +14,8 @@ boost::property_tree::ptree Stutility::build(std::vector<std::vector<std::__cxx1
     }
     return tri;
 }
+
+void Stutility::saveasjson(std::string filename, boost::property_tree::ptree tri)
+{
+    boost::property_tree::json_parser::write_json(filename, tri);
+}

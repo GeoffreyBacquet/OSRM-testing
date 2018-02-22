@@ -1,9 +1,7 @@
 #include "osrm/trip_parameters.hpp"
-
 #include "osrm/coordinate.hpp"
 #include "osrm/engine_config.hpp"
 #include "osrm/json_container.hpp"
-
 #include "osrm/osrm.hpp"
 #include "osrm/status.hpp"
 
@@ -86,7 +84,6 @@ int main( int argc, char *argv[] )
                 std::cout << "You are probably doing a query outside of the OSM extract.\n\n";
             }
 
-            //Constructing vector to build final map
             for( size_t j = 0; j < steps.values.size(); j++ )
             {
                 auto &step = steps.values.at( j ).get< json::Object >();
@@ -114,5 +111,5 @@ int main( int argc, char *argv[] )
     boost::property_tree::ptree tri;
     tri = Stutility::build( routestr, tri );
 
-    boost::property_tree::json_parser::write_json(std::cout, tri);
+    Stutility::saveasjson("output.json", tri);
 }
