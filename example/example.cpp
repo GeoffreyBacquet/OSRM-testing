@@ -100,8 +100,6 @@ int main( int argc, char *argv[] )
                 auto location = maneuver.values[ "location" ].get< json::Array >();
                 float lat = location.values.at( 0 ).get< json::Number >().value;
                 float lon = location.values.at( 1 ).get< json::Number >().value;
-//                std::string latstr = std::to_string(lat);
-//                std::string lonstr = std::to_string(lon);
                 std::string temp = std::to_string(lat) + "," + std::to_string(lon);
                 gpsstr.push_back( temp );
             }
