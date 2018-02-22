@@ -1,6 +1,6 @@
-#include "utility.h"
+#include "stutility.h"
 
-boost::property_tree::ptree Utility::build(std::vector<std::vector<std::__cxx11::string> > routestr, boost::property_tree::ptree tri)
+boost::property_tree::ptree Stutility::build(std::vector<std::vector<std::__cxx11::string> > routestr, boost::property_tree::ptree tri)
 {
     for(size_t i = 0; i < routestr.size(); i++)
     {

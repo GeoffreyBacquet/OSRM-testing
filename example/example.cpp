@@ -10,17 +10,11 @@
 #include "boost/property_tree/json_parser.hpp"
 
 #include "dbinfogetter.h"
-#include "utility.h"
+#include "stutility.h"
 
 #include <exception>
 #include <iostream>
 #include <string>
-#include <utility>
-
-#include <cstdlib>
-#include <functional>
-#include <set>
-
 
 int main( int argc, char *argv[] )
 {
@@ -118,7 +112,7 @@ int main( int argc, char *argv[] )
     }
 
     boost::property_tree::ptree tri;
-    tri = Utility::build( routestr, tri );
+    tri = Stutility::build( routestr, tri );
 
     boost::property_tree::json_parser::write_json(std::cout, tri);
 }

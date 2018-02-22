@@ -29,7 +29,7 @@ if(WIN32 AND MSVC_VERSION LESS 1900)
 endif()
 
 link_directories(${LibOSRM_LIBRARY_DIRS})
-add_executable(osrm-example example.cpp dbinfogetter.cpp dbinfogetter.h utility.h utility.cpp)
+add_executable(osrm-example example.cpp dbinfogetter.cpp dbinfogetter.h stutility.h stutility.cpp)
 
 link_directories(/usr/include/cppconn/)
 
