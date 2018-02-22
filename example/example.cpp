@@ -22,40 +22,17 @@
 #include <functional>
 #include <set>
 
-//boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
-//{
-//    std::vector<boost::property_tree::ptree> ptreetemp;
-//    for(size_t i = 0; i < routestr.size(); i++)
-//    {
-//        boost::property_tree::ptree temp;
-//        temp.put(routestr[i][routestr[i].size()-1], "departure");
-//        ptreetemp.push_back(temp);
-//    }
-
-//    for(size_t i = 0; i < routestr.size(); i++)
-//    {
-//        std::string path = routestr[0][0];
-//        for(size_t j = 0; j < routestr[i].size()-1; j++)
-//        {
-//            path = path + "." + routestr[i][j];
-
-//        }
-//        tri.add_child(path, ptreetemp[i]);
-//    }
-//    return tri;
-//}
-
 boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
 {
     for(size_t i = 0; i < routestr.size(); i++)
     {
-        std::string path = routestr[0][0];
+        std::string path = routestr[0][0]; //root of tree
         for(size_t j = 1; j < routestr[i].size(); j++)
         {
-            path = path + "." + routestr[i][j];
+            path = path + "/" + routestr[i][j]; //constructing tree
 
         }
-        tri.add(path, "departure");
+        tri.add(boost::property_tree::ptree::path_type(path, '/'), "departure"); //adding value departure with custom path
     }
     return tri;
 }
@@ -97,7 +74,6 @@ int main( int argc, char *argv[] )
         params.steps = true;
         params.overview = RouteParameters::OverviewType::False;
 
-        std::vector< std::vector< float > > gps;
         std::vector< std::string > gpsstr;
 
         // Route for all start point
@@ -140,18 +116,11 @@ int main( int argc, char *argv[] )
                 float lat = location.values.at( 0 ).get< json::Number >().value;
                 float lon = location.values.at( 1 ).get< json::Number >().value;
                 std::string latstr = std::to_string(lat);
-                size_t pos1 = latstr.find(".");
-                latstr.erase(pos1, 1);
                 std::string lonstr = std::to_string(lon);
-                size_t pos2 = lonstr.find(".");
-                lonstr.erase(pos2, 1);
                 std::string temp = latstr + "," + lonstr;
                 gpsstr.push_back( temp );
-                gps.push_back( { lat, lon } );
             }
-            std::reverse( gps.begin(), gps.end() );
             std::reverse( gpsstr.begin(), gpsstr.end());
-
         }
 
         else if ( status == Status::Error )
@@ -163,30 +132,7 @@ int main( int argc, char *argv[] )
             std::cout << "Message: " << message << "\n";
         }
         routestr.push_back( gpsstr );
-        route.push_back( gps );
     }
-
-    //     Showing trip coordinate maneuver
-    //    Startpoint::affichage( route );
-
-    // Building map
-    //        std::map< std::string, int > compteur(Startpoint::makemap(routestr));
-
-    //Building set to sort map by value and not by key
-    //        typedef std::function<bool( std::pair< std::string, int >, std::pair< std::string, int > ) > Comparator;
-
-    //        Comparator compFunctor = []( std::pair< std::string, int > elem1 ,std::pair< std::string, int > elem2)
-    //        {
-    //            return elem1.second > elem2.second;
-    //        };
-
-    //        std::set< std::pair< std::string, int >, Comparator > setGPS( compteur.begin(), compteur.end(), compFunctor );
-
-    //        //Showing set { lat , lon } : number
-    //        for(std::pair< std::string, int > element : setGPS )
-    //        {
-    //            std::cout << element.first << " " << element.second << " passage \n";
-    //        }
     boost::property_tree::ptree tri;
 
     tri = getTri( routestr, tri );
