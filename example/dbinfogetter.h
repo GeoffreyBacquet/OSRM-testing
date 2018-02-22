@@ -10,21 +10,19 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
-class Startpoint
+class Dbinfogetter
 {
 public:
-    Startpoint();
-
+    Dbinfogetter(std::string address, std::string adminusername, std::string password, std::string usedDB, std::string usedtable);
     std::vector< std::vector< float > > startpoint() const;
-
-    static void affichage( std::vector< std::vector< std::vector< float > > > gps );
-
-    static std::map< std::string, int > makemap( std::vector< std::vector < std::string> > route);
-
-    static void insert();
 
 private:
     std::vector< std::vector< float > > m_startpoint;
+    std::string m_address;
+    std::string m_adminusername;
+    std::string m_password;
+    std::string m_usedDB;
+    std::string m_usedtable;
 };
 
 #endif // STARTPOINT_H

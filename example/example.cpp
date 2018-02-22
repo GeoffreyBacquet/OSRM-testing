@@ -7,11 +7,10 @@
 #include "osrm/osrm.hpp"
 #include "osrm/status.hpp"
 
-#include "boost/property_tree/ptree.hpp"
 #include "boost/property_tree/json_parser.hpp"
-#include "boost/foreach.hpp"
 
-#include "startpoint.h"
+#include "dbinfogetter.h"
+#include "utility.h"
 
 #include <exception>
 #include <iostream>
@@ -22,20 +21,6 @@
 #include <functional>
 #include <set>
 
-boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
-{
-    for(size_t i = 0; i < routestr.size(); i++)
-    {
-        std::string path = routestr[0][0]; //root of tree
-        for(size_t j = 1; j < routestr[i].size(); j++)
-        {
-            path = path + "/" + routestr[i][j]; //constructing tree
-
-        }
-        tri.add(boost::property_tree::ptree::path_type(path, '/'), "departure"); //adding value departure with custom path
-    }
-    return tri;
-}
 
 int main( int argc, char *argv[] )
 {
@@ -64,7 +49,7 @@ int main( int argc, char *argv[] )
     const OSRM osrm{ config };
 
     //Creating an object with all startpoint from database
-    Startpoint coorGPS;
+    Dbinfogetter coorGPS("localhost", "root", "iamroot", "afpa_car_test", "address");
 
     // The following shows how to use the Route service; configure this service
 
@@ -115,9 +100,9 @@ int main( int argc, char *argv[] )
                 auto location = maneuver.values[ "location" ].get< json::Array >();
                 float lat = location.values.at( 0 ).get< json::Number >().value;
                 float lon = location.values.at( 1 ).get< json::Number >().value;
-                std::string latstr = std::to_string(lat);
-                std::string lonstr = std::to_string(lon);
-                std::string temp = latstr + "," + lonstr;
+//                std::string latstr = std::to_string(lat);
+//                std::string lonstr = std::to_string(lon);
+                std::string temp = std::to_string(lat) + "," + std::to_string(lon);
                 gpsstr.push_back( temp );
             }
             std::reverse( gpsstr.begin(), gpsstr.end());
@@ -133,8 +118,9 @@ int main( int argc, char *argv[] )
         }
         routestr.push_back( gpsstr );
     }
-    boost::property_tree::ptree tri;
 
-    tri = getTri( routestr, tri );
+    boost::property_tree::ptree tri;
+    tri = Utility::build( routestr, tri );
+
     boost::property_tree::json_parser::write_json(std::cout, tri);
 }
