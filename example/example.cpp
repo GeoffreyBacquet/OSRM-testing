@@ -24,58 +24,38 @@
 
 //boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
 //{
+//    std::vector<boost::property_tree::ptree> ptreetemp;
 //    for(size_t i = 0; i < routestr.size(); i++)
 //    {
-//        std::string path = routestr[i][0];
-//        for(size_t j = 0; j < routestr[i].size(); j++)
+//        boost::property_tree::ptree temp;
+//        temp.put(routestr[i][routestr[i].size()-1], "departure");
+//        ptreetemp.push_back(temp);
+//    }
+
+//    for(size_t i = 0; i < routestr.size(); i++)
+//    {
+//        std::string path = routestr[0][0];
+//        for(size_t j = 0; j < routestr[i].size()-1; j++)
 //        {
-//            if(j == routestr[i].size()-1)
-//            {
-//                tri.put(routestr[i][j], "end");
-//            }
-//            else
-//            {
-//                auto it = tri.find(routestr[i][j]);
-//                if(it == tri.not_found())
-//                {
-//                    boost::property_tree::ptree tri2;
-//                    tri2.add(routestr[i][j], "");
-//                    tri.add_child(path, tri2);
-//                }
-//                path = path + "." + routestr[i][j];
-//            }
+//            path = path + "." + routestr[i][j];
+
 //        }
+//        tri.add_child(path, ptreetemp[i]);
 //    }
 //    return tri;
 //}
+
 boost::property_tree::ptree getTri( std::vector<std::vector<std::string>> routestr, boost::property_tree::ptree tri)
 {
-    int taillemax(0);
-
-    for(size_t i=0; i < routestr.size(); i++)
-    {
-        if(routestr[i].size() > taillemax)
-        {
-            taillemax = routestr[i].size();
-        }
-    }
-
-    for(size_t j=0; j < taillemax; j++)
+    for(size_t i = 0; i < routestr.size(); i++)
     {
         std::string path = routestr[0][0];
-        for(size_t k = 0; k < routestr.size(); k++)
+        for(size_t j = 1; j < routestr[i].size(); j++)
         {
-            if(j < routestr[k].size())
-            {
-                auto it = tri.find(routestr[k][j]);
-                if(it == tri.not_found())
-                {
-                    boost::property_tree::ptree tri2;
-                    tri2.put(routestr[k][j], "");
-                    tri.add_child(path, tri2);
-                }
-            }
+            path = path + "." + routestr[i][j];
+
         }
+        tri.add(path, "departure");
     }
     return tri;
 }
@@ -170,6 +150,7 @@ int main( int argc, char *argv[] )
                 gps.push_back( { lat, lon } );
             }
             std::reverse( gps.begin(), gps.end() );
+            std::reverse( gpsstr.begin(), gpsstr.end());
 
         }
 
