@@ -8,7 +8,7 @@ class Stutility
 {
 public:
 
-    static boost::property_tree::ptree build(std::vector<std::vector<std::string>> routestr,boost::property_tree::ptree tri);
+    static boost::property_tree::ptree build(std::vector<std::vector<std::string>> routestr);
     static void saveasjson(std::string filename, boost::property_tree::ptree tri);
 
 };

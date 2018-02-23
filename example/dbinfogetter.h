@@ -1,8 +1,8 @@
-#ifndef STARTPOINT_H
-#define STARTPOINT_H
+#ifndef DBINFOGETTER_H
+#define DBINFOGETTER_H
 
 #include <vector>
-#include <map>
+
 #include "mysql_connection.h"
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -10,10 +10,10 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
-class Dbinfogetter
+class DbInfoGetter
 {
 public:
-    Dbinfogetter(std::string address, std::string adminusername, std::string password, std::string usedDB, std::string usedtable);
+    DbInfoGetter( std::string address, std::string adminusername, std::string password, std::string usedDB, std::string usedtable );
     std::vector< std::vector< float > > startpoint() const;
 
 private:
@@ -25,4 +25,7 @@ private:
     std::string m_usedtable;
 };
 
-#endif // STARTPOINT_H
+#endif // DBINFOGETTER_H
+
+
+//need to work on this to make it static and fully customizable (ip address, request, table...etc)

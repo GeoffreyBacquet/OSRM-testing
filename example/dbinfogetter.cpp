@@ -1,6 +1,6 @@
 #include "dbinfogetter.h"
 
-Dbinfogetter::Dbinfogetter(std::string address, std::string adminusername, std::string password, std::string usedDB,std::string usedtable)
+DbInfoGetter::DbInfoGetter(std::string address, std::string adminusername, std::string password, std::string usedDB,std::string usedtable)
     :m_address(address), m_adminusername(adminusername), m_password(password), m_usedDB(usedDB), m_usedtable(usedtable)
 {
     //Creating object for:
@@ -28,7 +28,7 @@ Dbinfogetter::Dbinfogetter(std::string address, std::string adminusername, std::
     delete con; //finaly connection
 }
 
-std::vector< std::vector< float > > Dbinfogetter::startpoint() const
+std::vector< std::vector< float > > DbInfoGetter::startpoint() const
 {
     return m_startpoint;
 }
